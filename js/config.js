@@ -25,11 +25,11 @@ export const CONFIG = {
   // 3) El número "gid" de cada pestaña: haz clic en la pestaña y mira el final de la
   //    dirección del navegador (…#gid=123456789). La primera pestaña suele ser 0.
   googleGids: {
-    materiales: '',
-    existencias: '',
-    categorias: '',
-    estados: '',
-    ubicaciones: '',
+    materiales: '0',
+    existencias: '1',
+    categorias: '2',
+    estados: '3',
+    ubicaciones: '4',
   },
 
   // Dirección pública de la web, usada en los códigos QR.
