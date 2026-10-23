@@ -16,12 +16,12 @@ export const CONFIG = {
   // ¿De dónde salen los datos?
   //   'demo'   → archivos de ejemplo de la carpeta datos/ (para probar)
   //   'google' → tu hoja de Google Sheets publicada en la web
-  fuente: 'demo',
+  fuente: 'google',
 
   // Solo si fuente = 'google'.
   // 1) En la hoja: Archivo → Compartir → Publicar en la web → Documento completo → CSV → Publicar.
   // 2) Pega aquí el enlace que te da Google (el que termina en /pub?output=csv).
-  googleUrlPublicada: '',
+  googleUrlPublicada: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTrwFpc7wyNjKO9mZXvsygaFw6fZG1iRciCAQn3bgH8NmdmVKM2YwRgHZAUf4NNXCi5XwtUfrZ7RlpW/pub?output=csv',
   // 3) El número "gid" de cada pestaña: haz clic en la pestaña y mira el final de la
   //    dirección del navegador (…#gid=123456789). La primera pestaña suele ser 0.
   googleGids: {
