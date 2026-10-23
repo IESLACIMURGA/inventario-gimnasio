@@ -1,0 +1,9 @@
+nombre,disponible,color,categorias,activo
+Disponible,sí,#2f7d4a,,sí
+Sin inflar,sí,#5f7486,Balones,sí
+Para lavar,no,#3d7fa8,Ropa,sí
+Sin estampar,no,#8a6bb0,Ropa,sí
+Prestado,no,#a8650f,,sí
+Pendiente de revisión,no,#c08a1e,,sí
+Dañado,no,#b9413f,,sí
+Perdido,no,#6b6b6b,,sí

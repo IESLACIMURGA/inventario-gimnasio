@@ -1,0 +1,357 @@
+/* =====================================================================
+   Modelo de datos del inventario.
+   Recibe las cinco hojas (ya convertidas a objetos) y construye un modelo
+   coherente: categorías y ubicaciones jerárquicas, estados configurables y
+   materiales con sus existencias por variante × ubicación × estado.
+   Las cantidades se calculan SIEMPRE a partir de las filas de "Existencias";
+   no hay totales escritos a mano en ningún sitio.
+   Todo este archivo son funciones puras (sin DOM): se prueban con Node.
+   ===================================================================== */
+
+import { quitarAcentos } from './csv.js';
+
+export const HOJAS = ['categorias', 'estados', 'ubicaciones', 'materiales', 'existencias'];
+
+export const clave = (s) => quitarAcentos(String(s ?? '').trim().toLowerCase()).replace(/\s+/g, ' ');
+
+export function siNo(valor, porDefecto = true) {
+  const v = clave(valor);
+  if (v === '') return porDefecto;
+  if (['si', 's', 'x', 'true', '1', 'yes', 'activo', 'activa', 'verdadero'].includes(v)) return true;
+  if (['no', 'n', 'false', '0', 'inactivo', 'inactiva', 'falso'].includes(v)) return false;
+  return porDefecto;
+}
+
+const COLOR_HEX = /^#(?:[0-9a-f]{3}|[0-9a-f]{6})$/i;
+export const colorSeguro = (c, porDefecto) => (COLOR_HEX.test(String(c ?? '').trim()) ? c.trim() : porDefecto);
+
+/**
+ * Acepta rutas relativas del propio sitio (img/balon.jpg) o direcciones https.
+ * Convierte enlaces de compartir de Google Drive en enlaces de miniatura.
+ * Cualquier otra cosa (javascript:, data:, http:…) se descarta.
+ */
+export function urlImagenSegura(valor) {
+  const s = String(valor ?? '').trim();
+  if (!s) return null;
+  const drive = s.match(/^https:\/\/drive\.google\.com\/(?:file\/d\/|open\?id=|uc\?(?:export=\w+&)?id=)([\w-]{10,})/);
+  if (drive) return `https://drive.google.com/thumbnail?id=${drive[1]}&sz=w1200`;
+  if (/^https:\/\/[^\s"'<>]+$/i.test(s)) return s;
+  if (/^[\p{L}\p{N}_\-./ ]+\.(?:jpe?g|png|webp|gif|avif|svg)$/iu.test(s) && !s.startsWith('/') && !s.includes('..')) {
+    return s.split('/').map(encodeURIComponent).join('/');
+  }
+  return null;
+}
+
+const entero = (v) => {
+  const s = String(v ?? '').trim().replace(/\s/g, '');
+  return /^\d+$/.test(s) ? Number(s) : NaN;
+};
+
+function arbol(lista, nombreHoja, avisos) {
+  // lista: [{ k, padreK, ... }] → asigna .padre, .hijos, .ruta y detecta ciclos
+  const porK = new Map(lista.map((n) => [n.k, n]));
+  lista.forEach((n) => { n.hijos = []; n.padre = null; });
+  lista.forEach((n) => {
+    if (!n.padreK) return;
+    const p = porK.get(n.padreK);
+    if (!p) { avisos.push(`${nombreHoja}, fila ${n._fila}: el padre «${n.padreTexto}» no existe; se muestra en el primer nivel.`); return; }
+    n.padre = p;
+  });
+  lista.forEach((n) => {
+    const vistos = new Set([n]);
+    let p = n.padre;
+    while (p) {
+      if (vistos.has(p)) {
+        avisos.push(`${nombreHoja}, fila ${n._fila}: «${n.nombre}» forma un ciclo de padres; se muestra en el primer nivel.`);
+        n.padre = null; break;
+      }
+      vistos.add(p); p = p.padre;
+    }
+  });
+  lista.forEach((n) => { if (n.padre) n.padre.hijos.push(n); });
+  lista.forEach((n) => {
+    const ruta = []; let p = n;
+    while (p) { ruta.unshift(p); p = p.padre; }
+    n.ruta = ruta;
+  });
+  return porK;
+}
+
+export function construirModelo(hojas) {
+  const avisos = [];
+
+  // ---------- Categorías
+  const cats = [];
+  const vistasCat = new Set();
+  (hojas.categorias || []).forEach((f) => {
+    const nombre = f.nombre || f.categoria;
+    if (!nombre) return;
+    const k = clave(nombre);
+    if (vistasCat.has(k)) { avisos.push(`Categorías, fila ${f._fila}: «${nombre}» está repetida; se usa la primera.`); return; }
+    vistasCat.add(k);
+    cats.push({
+      _fila: f._fila, k, nombre,
+      padreK: clave(f.padre), padreTexto: f.padre,
+      icono: (f.icono || '').slice(0, 4),
+      color: colorSeguro(f.color, null),
+      orden: Number.isFinite(Number(f.orden)) && f.orden !== '' ? Number(f.orden) : 999,
+      activa: siNo(f.activa ?? f.activo, true),
+    });
+  });
+  const categorias = arbol(cats, 'Categorías', avisos);
+  cats.forEach((c) => {
+    if (!c.color) c.color = c.padre ? (c.ruta[0].color || null) : null;
+    // una subcategoría de una categoría desactivada también queda oculta
+    c.visible = c.ruta.every((x) => x.activa);
+  });
+  const ordenar = (a, b) => a.orden - b.orden || a.nombre.localeCompare(b.nombre, 'es');
+  cats.forEach((c) => c.hijos.sort(ordenar));
+  const categoriasRaiz = cats.filter((c) => !c.padre).sort(ordenar);
+
+  // ---------- Estados
+  const estados = new Map();
+  (hojas.estados || []).forEach((f) => {
+    if (!f.nombre) return;
+    const k = clave(f.nombre);
+    if (estados.has(k)) { avisos.push(`Estados, fila ${f._fila}: «${f.nombre}» está repetido; se usa el primero.`); return; }
+    estados.set(k, {
+      k, nombre: f.nombre,
+      disponible: siNo(f.disponible ?? f.cuenta_como_disponible, false),
+      color: colorSeguro(f.color, '#8a96a0'),
+      categorias: String(f.categorias || '').split(',').map(clave).filter(Boolean),
+      activo: siNo(f.activo, true),
+      orden: estados.size,
+    });
+  });
+
+  // ---------- Ubicaciones
+  const ubis = [];
+  const vistasUbi = new Set();
+  (hojas.ubicaciones || []).forEach((f) => {
+    if (!f.codigo && !f.nombre) return;
+    const codigo = (f.codigo || f.nombre).trim();
+    const k = clave(codigo);
+    if (vistasUbi.has(k)) { avisos.push(`Ubicaciones, fila ${f._fila}: el código «${codigo}» está repetido; se usa el primero.`); return; }
+    vistasUbi.add(k);
+    ubis.push({
+      _fila: f._fila, k, codigo, nombre: f.nombre || codigo,
+      padreK: clave(f.padre), padreTexto: f.padre,
+      tipo: f.tipo || '', descripcion: f.descripcion || '',
+      activa: siNo(f.activa ?? f.activo, true),
+      lineas: [],
+    });
+  });
+  const ubicaciones = arbol(ubis, 'Ubicaciones', avisos);
+  const ubicacionesRaiz = ubis.filter((u) => !u.padre);
+  // También se permite escribir el NOMBRE de la ubicación en Existencias
+  const ubiPorNombre = new Map();
+  ubis.forEach((u) => { if (!ubiPorNombre.has(clave(u.nombre))) ubiPorNombre.set(clave(u.nombre), u); });
+
+  // ---------- Materiales
+  const materiales = new Map();
+  const sinCategoria = { k: '', nombre: 'Sin categoría', ruta: [], color: null, icono: '', visible: true };
+  (hojas.materiales || []).forEach((f) => {
+    if (!f.codigo && !f.nombre) return;
+    const codigo = (f.codigo || '').trim();
+    if (!codigo) { avisos.push(`Materiales, fila ${f._fila}: «${f.nombre}» no tiene código; no se puede mostrar.`); return; }
+    const k = clave(codigo);
+    if (materiales.has(k)) { avisos.push(`Materiales, fila ${f._fila}: el código «${codigo}» está repetido; se usa el primero.`); return; }
+    let categoria = sinCategoria;
+    if (f.categoria) {
+      categoria = categorias.get(clave(f.categoria));
+      if (!categoria) {
+        avisos.push(`Materiales, fila ${f._fila}: la categoría «${f.categoria}» no existe en la hoja Categorías.`);
+        categoria = sinCategoria;
+      }
+    }
+    const fotos = [f.foto, ...String(f.fotos_extra || '').split('|')]
+      .map(urlImagenSegura).filter(Boolean);
+    if (f.foto && !urlImagenSegura(f.foto)) avisos.push(`Materiales, fila ${f._fila}: la foto de «${f.nombre}» no es una ruta ni un enlace https válido.`);
+    materiales.set(k, {
+      k, codigo, nombre: f.nombre || codigo,
+      descripcion: f.descripcion || '',
+      categoria, fotos,
+      notas: f.notas || '',
+      alta: f.alta || f.fecha_alta || '',
+      actualizado: f.actualizado || f.ultima_modificacion || '',
+      activo: siNo(f.activo, true),
+      lineas: [], total: 0, disponibles: 0,
+    });
+  });
+
+  // ---------- Existencias (fuente única de las cantidades)
+  const combinadas = new Map();
+  (hojas.existencias || []).forEach((f) => {
+    if (!f.material && !f.cantidad) return;
+    const mat = materiales.get(clave(f.material));
+    if (!mat) { avisos.push(`Existencias, fila ${f._fila}: el material «${f.material}» no existe en la hoja Materiales.`); return; }
+    const cantidad = entero(f.cantidad);
+    if (Number.isNaN(cantidad)) {
+      avisos.push(`Existencias, fila ${f._fila}: la cantidad «${f.cantidad}» de «${mat.nombre}» no es un número entero igual o mayor que 0; se ignora la fila.`);
+      return;
+    }
+    let estado = estados.get(clave(f.estado));
+    if (!estado) {
+      if (f.estado) avisos.push(`Existencias, fila ${f._fila}: el estado «${f.estado}» no existe en la hoja Estados; esas unidades no cuentan como disponibles.`);
+      else avisos.push(`Existencias, fila ${f._fila}: falta el estado de «${mat.nombre}»; esas unidades no cuentan como disponibles.`);
+      const nombreEstado = f.estado || 'Sin estado';
+      const ke = clave(nombreEstado);
+      estado = estados.get(ke) || { k: ke, nombre: nombreEstado, disponible: false, color: '#8a96a0', categorias: [], activo: true, orden: 999, desconocido: true };
+      estados.set(ke, estado);
+    } else if (estado.categorias.length && mat.categoria.ruta.length
+      && !mat.categoria.ruta.some((c) => estado.categorias.includes(c.k))) {
+      avisos.push(`Existencias, fila ${f._fila}: el estado «${estado.nombre}» no está pensado para la categoría de «${mat.nombre}».`);
+    }
+    let ubicacion = null;
+    if (f.ubicacion) {
+      ubicacion = ubicaciones.get(clave(f.ubicacion)) || ubiPorNombre.get(clave(f.ubicacion)) || null;
+      if (!ubicacion) avisos.push(`Existencias, fila ${f._fila}: la ubicación «${f.ubicacion}» no existe en la hoja Ubicaciones.`);
+    }
+    const variante = (f.variante || f.talla || '').trim();
+    const kLinea = [mat.k, clave(variante), ubicacion ? ubicacion.k : '', estado.k].join('\u0001');
+    const previa = combinadas.get(kLinea);
+    if (previa) {
+      avisos.push(`Existencias, fila ${f._fila}: repite material, variante, ubicación y estado de la fila ${previa._fila}; se suman las cantidades.`);
+      previa.cantidad += cantidad;
+      return;
+    }
+    const linea = { _fila: f._fila, material: mat, variante, ubicacion, estado, cantidad };
+    combinadas.set(kLinea, linea);
+    mat.lineas.push(linea);
+    if (ubicacion) ubicacion.lineas.push(linea);
+  });
+
+  // ---------- Totales por material (derivados)
+  materiales.forEach((m) => {
+    m.total = 0; m.disponibles = 0;
+    m.porEstado = new Map();
+    m.porVariante = new Map();
+    m.ubicaciones = new Set();
+    m.lineas.forEach((l) => {
+      m.total += l.cantidad;
+      if (l.estado.disponible) m.disponibles += l.cantidad;
+      m.porEstado.set(l.estado, (m.porEstado.get(l.estado) || 0) + l.cantidad);
+      const v = m.porVariante.get(l.variante) || { variante: l.variante, total: 0, disponibles: 0, porEstado: new Map(), lineas: [] };
+      v.total += l.cantidad;
+      if (l.estado.disponible) v.disponibles += l.cantidad;
+      v.porEstado.set(l.estado, (v.porEstado.get(l.estado) || 0) + l.cantidad);
+      v.lineas.push(l);
+      m.porVariante.set(l.variante, v);
+      if (l.ubicacion && l.cantidad > 0) m.ubicaciones.add(l.ubicacion);
+    });
+    m.variantes = [...m.porVariante.values()].sort((a, b) => compararTallas(a.variante, b.variante));
+    m.indice = clave([
+      m.codigo, m.nombre, m.descripcion, m.notas,
+      ...m.categoria.ruta.map((c) => c.nombre),
+      ...m.variantes.map((v) => v.variante),
+      ...[...m.ubicaciones].flatMap((u) => u.ruta.flatMap((x) => [x.nombre, x.codigo])),
+      ...[...m.porEstado.keys()].map((e) => e.nombre),
+    ].join(' '));
+    m.tokens = new Set(m.indice.split(/[^a-z0-9ñ]+/).filter(Boolean));
+    m.visible = m.activo && m.categoria.visible !== false;
+  });
+
+  return {
+    categorias, categoriasRaiz,
+    estados, ubicaciones, ubicacionesRaiz,
+    materiales,
+    avisos,
+  };
+}
+
+const ORDEN_TALLAS = ['xxs', '2xs', 'xs', 's', 'm', 'l', 'xl', 'xxl', '2xl', 'xxxl', '3xl', '4xl'];
+export function compararTallas(a, b) {
+  const ka = clave(a); const kb = clave(b);
+  const ia = ORDEN_TALLAS.indexOf(ka); const ib = ORDEN_TALLAS.indexOf(kb);
+  if (ia >= 0 && ib >= 0) return ia - ib;
+  if (ia >= 0) return -1;
+  if (ib >= 0) return 1;
+  return String(a).localeCompare(String(b), 'es', { numeric: true });
+}
+
+/** ¿El material pertenece a la categoría (o a alguna de sus subcategorías)? */
+export function enCategoria(m, kCategoria) {
+  if (!kCategoria) return true;
+  return m.categoria.ruta.some((c) => c.k === kCategoria);
+}
+
+export function filtrar(modelo, { texto = '', categoria = '', estado = '', disponibilidad = '' } = {}) {
+  const palabras = clave(texto).split(' ').filter(Boolean);
+  return [...modelo.materiales.values()].filter((m) => {
+    if (!m.visible) return false;
+    if (!enCategoria(m, categoria)) return false;
+    if (estado && !(m.porEstado.get(modelo.estados.get(estado)) > 0)) return false;
+    if (disponibilidad === 'si' && m.disponibles <= 0) return false;
+    if (disponibilidad === 'no' && m.disponibles > 0) return false;
+    // Con varias palabras, las de 1-2 letras ("a", "xl", "2") deben coincidir enteras
+    // para que «estantería a» no encuentre todo lo que contiene una «a».
+    const exacta = palabras.length > 1;
+    return palabras.every((p) => (exacta && p.length <= 2 ? m.tokens.has(p) : m.indice.includes(p)));
+  });
+}
+
+export function ordenar(lista, criterio = 'nombre') {
+  const porNombre = (a, b) => a.nombre.localeCompare(b.nombre, 'es', { numeric: true });
+  const f = {
+    nombre: porNombre,
+    'nombre-desc': (a, b) => porNombre(b, a),
+    disponibles: (a, b) => b.disponibles - a.disponibles || porNombre(a, b),
+    total: (a, b) => b.total - a.total || porNombre(a, b),
+    categoria: (a, b) => a.categoria.nombre.localeCompare(b.categoria.nombre, 'es') || porNombre(a, b),
+  }[criterio] || porNombre;
+  return [...lista].sort(f);
+}
+
+/** Resumen del inventario; si se pasa una lista, se calcula solo sobre esos materiales. */
+export function estadisticas(modelo, lista = null) {
+  const visibles = lista || [...modelo.materiales.values()].filter((m) => m.visible);
+  let unidades = 0; let disponibles = 0;
+  const porEstado = new Map();
+  const ubicacionesUsadas = new Set();
+  visibles.forEach((m) => {
+    unidades += m.total; disponibles += m.disponibles;
+    m.porEstado.forEach((n, e) => porEstado.set(e, (porEstado.get(e) || 0) + n));
+    m.ubicaciones.forEach((u) => ubicacionesUsadas.add(u));
+  });
+  const categoriasActivas = [...modelo.categorias.values()].filter((c) => c.visible && !c.padre).length;
+  return {
+    materiales: visibles.length,
+    variantes: visibles.reduce((s, m) => s + m.variantes.length, 0),
+    unidades, disponibles,
+    categoriasActivas,
+    ubicacionesUsadas: ubicacionesUsadas.size,
+    porEstado,
+  };
+}
+
+/** Todas las líneas guardadas en una ubicación y (opcionalmente) en las que cuelgan de ella. */
+export function contenidoUbicacion(ubicacion, incluirHijas = true) {
+  const lineas = [];
+  const recorrer = (u) => {
+    u.lineas.forEach((l) => { if (l.cantidad > 0 && l.material.visible) lineas.push(l); });
+    if (incluirHijas) u.hijos.forEach(recorrer);
+  };
+  recorrer(ubicacion);
+  const porMaterial = new Map();
+  lineas.forEach((l) => {
+    const g = porMaterial.get(l.material) || { material: l.material, total: 0, disponibles: 0, lineas: [] };
+    g.total += l.cantidad;
+    if (l.estado.disponible) g.disponibles += l.cantidad;
+    g.lineas.push(l);
+    porMaterial.set(l.material, g);
+  });
+  return [...porMaterial.values()].sort((a, b) => a.material.nombre.localeCompare(b.material.nombre, 'es'));
+}
+
+/** Filas para exportar a Excel: una por existencia de los materiales indicados. */
+export function filasExportacion(materiales) {
+  const filas = [['Código', 'Material', 'Categoría', 'Variante / talla', 'Ubicación', 'Estado', 'Cuenta como disponible', 'Cantidad']];
+  materiales.forEach((m) => {
+    m.lineas.forEach((l) => filas.push([
+      m.codigo, m.nombre, m.categoria.ruta.map((c) => c.nombre).join(' › ') || 'Sin categoría',
+      l.variante, l.ubicacion ? l.ubicacion.ruta.map((u) => u.nombre).join(' › ') : '',
+      l.estado.nombre, l.estado.disponible ? 'Sí' : 'No', l.cantidad,
+    ]));
+  });
+  return filas;
+}

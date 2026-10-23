@@ -1,0 +1,10 @@
+{
+  "name": "inventario-gimnasio",
+  "private": true,
+  "type": "module",
+  "description": "Web estática del inventario del almacén del gimnasio. No necesita instalar nada para funcionar; este archivo solo sirve para ejecutar las pruebas.",
+  "scripts": {
+    "test": "node --test tests/*.test.mjs",
+    "servidor": "python3 -m http.server 8000"
+  }
+}

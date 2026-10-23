@@ -1,0 +1,17 @@
+nombre,padre,icono,color,orden,activa
+Balones,,⚽,#d3ead6,1,sí
+Juegos de mesa,,♟️,#e4dcef,2,sí
+Ropa,,👕,#f2dcd4,3,sí
+Exposiciones,,🖼️,#d4deec,4,sí
+Material deportivo,,🎒,#f3e6c9,5,sí
+Fútbol,Balones,,,1,sí
+Baloncesto,Balones,,,2,sí
+Voleibol,Balones,,,3,sí
+Polos,Ropa,,,1,sí
+Camisetas,Ropa,,,2,sí
+Chaquetas,Ropa,,,3,sí
+Pantalones,Ropa,,,4,sí
+Otras prendas,Ropa,,,5,sí
+Colchonetas,Material deportivo,,,1,sí
+Aros y cuerdas,Material deportivo,,,2,sí
+Raquetas y palas,Material deportivo,,,3,sí

@@ -1,0 +1,10 @@
+codigo,nombre,padre,tipo,descripcion,activa
+ALM,Almacén principal,,Zona,Almacén junto al gimnasio,sí
+EST-A,Estantería A,ALM,Estantería,"Pared izquierda, al entrar",sí
+EST-A1,Estante 1,EST-A,Estante,Balda de abajo,sí
+EST-A2,Estante 2,EST-A,Estante,Balda del medio,sí
+EST-B,Estantería B,ALM,Estantería,Pared del fondo,sí
+CAJA-B2,Caja 2,EST-B,Caja,Caja de plástico azul,sí
+ARM-1,Armario 1,ALM,Armario,Armario metálico con llave,sí
+BURRO-A,Burro A,ALM,Burro de ropa,Ropa del instituto,sí
+GANCHO-C,Gancho C,ALM,Gancho,Paneles y banners colgados,sí

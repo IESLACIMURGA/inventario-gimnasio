@@ -1,0 +1,33 @@
+material,variante,ubicacion,estado,cantidad
+BAL-FUT-01,,EST-A1,Disponible,8
+BAL-FUT-01,,EST-A1,Sin inflar,3
+BAL-FUT-01,,EST-B,Dañado,1
+BAL-BAS-01,,EST-A2,Disponible,10
+BAL-BAS-01,,EST-A2,Pendiente de revisión,2
+BAL-VOL-01,,EST-A2,Disponible,6
+EXP-UNI-01,,GANCHO-C,Disponible,6
+EXP-DEP-01,,GANCHO-C,Disponible,4
+ROP-POL-NEG,S,BURRO-A,Disponible,4
+ROP-POL-NEG,M,BURRO-A,Disponible,5
+ROP-POL-NEG,M,BURRO-A,Sin estampar,6
+ROP-POL-NEG,L,BURRO-A,Disponible,4
+ROP-POL-NEG,XL,BURRO-A,Para lavar,2
+ROP-CAM-INS,S,BURRO-A,Disponible,3
+ROP-CAM-INS,M,BURRO-A,Disponible,2
+ROP-CAM-INS,M,BURRO-A,Para lavar,1
+ROP-CAM-INS,M,BURRO-A,Sin estampar,2
+ROP-CAM-INS,L,BURRO-A,Disponible,4
+ROP-CAM-INS,XL,BURRO-A,Disponible,1
+ROP-CHA-01,M,ARM-1,Disponible,3
+ROP-CHA-01,L,ARM-1,Disponible,2
+ROP-CHA-01,L,ARM-1,Prestado,1
+DEP-COL-01,,ALM,Disponible,20
+DEP-COL-01,,ALM,Dañado,2
+DEP-ARO-01,Rojo,CAJA-B2,Disponible,6
+DEP-ARO-01,Azul,CAJA-B2,Disponible,6
+DEP-ARO-01,Amarillo,CAJA-B2,Disponible,5
+DEP-CUE-01,,CAJA-B2,Disponible,15
+DEP-PAL-01,,ARM-1,Disponible,12
+DEP-PAL-01,,ARM-1,Perdido,1
+JUE-AJE-01,,EST-B,Disponible,8
+JUE-PAR-01,,EST-B,Disponible,4

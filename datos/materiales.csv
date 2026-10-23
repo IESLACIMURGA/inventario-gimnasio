@@ -1,0 +1,15 @@
+codigo,nombre,descripcion,categoria,foto,fotos_extra,notas,activo,alta,actualizado
+BAL-FUT-01,Balón de fútbol,Balón talla 5 para fútbol 11 y fútbol sala exterior.,Fútbol,,,Varios sin inflar,sí,2025-09-15,2026-10-20
+BAL-BAS-01,Balón de baloncesto,"Balón talla 7 de goma, uso exterior e interior.",Baloncesto,,,,sí,2025-09-15,2026-10-01
+BAL-VOL-01,Balón de voleibol,Balón blando de entrenamiento.,Voleibol,,,,sí,2025-09-15,2026-09-30
+EXP-UNI-01,Panel expo universo,Panel enrollable de la exposición del sistema solar.,Exposiciones,,,Banner con soporte,sí,2025-10-02,2026-10-02
+EXP-DEP-01,Panel deportistas extremeños,Serie de paneles rígidos para la semana cultural.,Exposiciones,,,,sí,2026-02-10,2026-02-10
+ROP-POL-NEG,Polo negro,"Polo del instituto en negro, algodón.",Polos,,,,sí,2025-09-20,2026-10-21
+ROP-CAM-INS,Camiseta del instituto,Camiseta técnica blanca con logo.,Camisetas,,,,sí,2025-09-20,2026-10-21
+ROP-CHA-01,Chaqueta de chándal,Chaqueta azul marino del equipo.,Chaquetas,,,,sí,2025-09-20,2026-06-10
+DEP-COL-01,Colchoneta de suelo,Colchoneta 180×60 cm.,Colchonetas,,,Apiladas,sí,2025-09-10,2026-10-05
+DEP-ARO-01,Aro de psicomotricidad,Aros de 60 cm de colores.,Aros y cuerdas,,,,sí,2025-09-10,2026-09-12
+DEP-CUE-01,Cuerda de saltar,Cuerda con mango de madera.,Aros y cuerdas,,,,sí,2025-09-10,2026-09-12
+DEP-PAL-01,Pala de pádel,Pala de pádel de iniciación.,Raquetas y palas,,,,sí,2025-11-03,2026-10-15
+JUE-AJE-01,Ajedrez,Tablero plegable con piezas.,Juegos de mesa,,,,sí,2025-09-25,2026-03-01
+JUE-PAR-01,Parchís,Tablero de parchís de 4 jugadores.,Juegos de mesa,,,Falta un dado en uno,sí,2025-09-25,2026-03-01
