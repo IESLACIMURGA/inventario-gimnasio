@@ -1,6 +1,6 @@
 /* =====================================================================
    CONFIGURACIÓN — es el único archivo que hay que tocar para poner la
-   web en marcha. Las instrucciones paso a paso están en el README.
+   web en marcha. Las instrucciones paso a paso están en MANUAL.md.
    ===================================================================== */
 
 export const CONFIG = {
