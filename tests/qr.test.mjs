@@ -26,8 +26,8 @@ function aPGM(m, ruta) {
 test('Los QR de las ubicaciones se leen correctamente', { skip: !hayOpenCV && 'Python + OpenCV no disponible' }, () => {
   const dir = mkdtempSync(join(tmpdir(), 'qr-'));
   const textos = [
-    'https://evagr11.github.io/inventario-gimnasio/#/ubicacion/EST-A1',
-    'https://evagr11.github.io/inventario-gimnasio/#/ubicacion/BURRO-A',
+    'https://ieslacimurga.github.io/inventario-gimnasio/#/ubicacion/EST-A1',
+    'https://ieslacimurga.github.io/inventario-gimnasio/#/ubicacion/BURRO-A',
     'https://ejemplo.github.io/una-ruta-bastante-larga/#/ubicacion/ESTANTERIA-PRINCIPAL-DEL-FONDO-CAJA-12',
     'Almacén → Estantería A → Caja 2 · ñ',
   ];

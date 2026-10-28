@@ -96,7 +96,7 @@ googleGids: {
   estados: '…',
   ubicaciones: '…',
 },
-urlPublica: 'https://evagr11.github.io/inventario-gimnasio-estatico/',
+urlPublica: 'https://ieslacimurga.github.io/inventario-gimnasio/',
 ```
 
 Pulsa **Commit changes**.
@@ -106,7 +106,7 @@ Pulsa **Commit changes**.
 1. El repositorio debe ser **público** (GitHub Pages es gratis solo en repositorios públicos; no hay ninguna contraseña ni dato personal en el código).
 2. En el repositorio: **Settings → Pages**.
 3. En «Build and deployment»: *Source* = **Deploy from a branch**, *Branch* = **main** y carpeta **/ (root)** → **Save**.
-4. En uno o dos minutos aparecerá arriba la dirección de la web: `https://evagr11.github.io/inventario-gimnasio-estatico/`.
+4. En uno o dos minutos aparecerá arriba la dirección de la web: `https://ieslacimurga.github.io/inventario-gimnasio/`.
 5. Ábrela y comprueba que aparece tu inventario. Si sale un aviso de «Revisión de datos», corrige esas filas en la hoja.
 
 ## 3. Uso diario (profesores)

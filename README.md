@@ -3,14 +3,18 @@
 </div>
 
 <div align="center">
-  <a href="https://github.com/evagr11/inventario-gimnasio-estatico" target="_blank"><img src="https://img.shields.io/badge/Ver_Código-2F3B45?style=for-the-badge&logo=github&logoColor=white" alt="Ver Código"></a>
-  <a href="https://evagr11.github.io/inventario-gimnasio-estatico/" target="_blank"><img src="https://img.shields.io/badge/Ver_Web-5B7387?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Ver Web"></a>
+  <a href="https://github.com/IESLACIMURGA/inventario-gimnasio" target="_blank"><img src="https://img.shields.io/badge/Repo_Oficial-2F3B45?style=for-the-badge&logo=github&logoColor=white" alt="Repositorio oficial"></a>
+  <a href="https://ieslacimurga.github.io/inventario-gimnasio/" target="_blank"><img src="https://img.shields.io/badge/Ver_Web-5B7387?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Ver Web"></a>
+  <a href="https://www.figma.com/design/wk6avKTmmMpyyWOytJhW6S/inventario" target="_blank"><img src="https://img.shields.io/badge/Ver_Figma-2F3B45?style=for-the-badge&logo=figma&logoColor=white" alt="Ver Figma"></a>
   <a href="MANUAL.md"><img src="https://img.shields.io/badge/Manual-9DB4C6?style=for-the-badge&logo=bookstack&logoColor=black" alt="Manual"></a>
 </div>
 
 <div align="center">
   <a href="https://git.io/typing-svg"><img src="https://readme-typing-svg.demolab.com/?font=JetBrains+Mono&size=18&duration=3500&pause=800&color=5B7387&center=true&vCenter=true&width=600&lines=En+uso+real+en+un+instituto%3BGoogle+Sheets+como+base+de+datos%3BEtiquetas+QR+por+estanter%C3%ADa%3BPWA+instalable+y+sin+conexi%C3%B3n%3BCoste+cero%2C+sin+servidor" alt="Typing SVG" /></a>
 </div>
+
+> [!IMPORTANT]
+> Esta es **mi copia de portfolio**. La versión oficial, la que publica la web que usa el instituto, está en la organización del centro: **[IESLACIMURGA/inventario-gimnasio](https://github.com/IESLACIMURGA/inventario-gimnasio)**. Los cambios se hacen allí.
 
 # 🚀 Sobre el Proyecto
 
@@ -116,7 +120,7 @@ inventario-gimnasio-estatico/
 
 ### 1. Verla online
 
-**[evagr11.github.io/inventario-gimnasio-estatico](https://evagr11.github.io/inventario-gimnasio-estatico/)**
+**[ieslacimurga.github.io/inventario-gimnasio](https://ieslacimurga.github.io/inventario-gimnasio/)** (versión oficial del centro)
 
 ### 2. Ponerla en marcha para otro centro
 
@@ -126,11 +130,11 @@ El [manual](MANUAL.md#2-puesta-en-marcha-paso-a-paso) explica paso a paso cómo 
 
 1.  Clona el repositorio:
     ```bash
-    git clone https://github.com/evagr11/inventario-gimnasio-estatico.git
+    git clone https://github.com/IESLACIMURGA/inventario-gimnasio.git
     ```
 2.  Navega a la carpeta del proyecto:
     ```bash
-    cd inventario-gimnasio-estatico
+    cd inventario-gimnasio
     ```
 3.  Levanta un servidor (los módulos de JavaScript no funcionan con doble clic) y abre `http://localhost:8000`:
     ```bash

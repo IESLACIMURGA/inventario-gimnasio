@@ -34,9 +34,9 @@ export const CONFIG = {
 
   // Dirección pública de la web, usada en los códigos QR.
   // Déjala vacía para usar automáticamente la dirección desde la que se abre la página.
-  // Rellénala (p. ej. 'https://evagr11.github.io/inventario-gimnasio/') antes de imprimir
+  // Rellénala (p. ej. 'https://ieslacimurga.github.io/inventario-gimnasio/') antes de imprimir
   // etiquetas si las generas desde otra dirección (por ejemplo, desde tu ordenador).
-  urlPublica: 'https://evagr11.github.io/inventario-gimnasio-estatico/',
+  urlPublica: 'https://ieslacimurga.github.io/inventario-gimnasio/',
 
   // Materiales por página en el listado
   porPagina: 15,
