@@ -3,9 +3,8 @@
 </div>
 
 <div align="center">
-  <a href="https://github.com/IESLACIMURGA/inventario-gimnasio" target="_blank"><img src="https://img.shields.io/badge/Repo_Oficial-2F3B45?style=for-the-badge&logo=github&logoColor=white" alt="Repositorio oficial"></a>
-  <a href="https://ieslacimurga.github.io/inventario-gimnasio/" target="_blank"><img src="https://img.shields.io/badge/Ver_Web-5B7387?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Ver Web"></a>
-  <a href="https://www.figma.com/design/wk6avKTmmMpyyWOytJhW6S/inventario" target="_blank"><img src="https://img.shields.io/badge/Ver_Figma-2F3B45?style=for-the-badge&logo=figma&logoColor=white" alt="Ver Figma"></a>
+  <a href="https://ieslacimurga.github.io/inventario-gimnasio/" target="_blank"><img src="https://img.shields.io/badge/Abrir_el_Inventario-2F3B45?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Abrir el inventario"></a>
+  <a href="https://www.figma.com/design/wk6avKTmmMpyyWOytJhW6S/inventario" target="_blank"><img src="https://img.shields.io/badge/Ver_Figma-5B7387?style=for-the-badge&logo=figma&logoColor=white" alt="Ver Figma"></a>
   <a href="MANUAL.md"><img src="https://img.shields.io/badge/Manual-9DB4C6?style=for-the-badge&logo=bookstack&logoColor=black" alt="Manual"></a>
 </div>
 
@@ -13,8 +12,8 @@
   <a href="https://git.io/typing-svg"><img src="https://readme-typing-svg.demolab.com/?font=JetBrains+Mono&size=18&duration=3500&pause=800&color=5B7387&center=true&vCenter=true&width=600&lines=En+uso+real+en+un+instituto%3BGoogle+Sheets+como+base+de+datos%3BEtiquetas+QR+por+estanter%C3%ADa%3BPWA+instalable+y+sin+conexi%C3%B3n%3BCoste+cero%2C+sin+servidor" alt="Typing SVG" /></a>
 </div>
 
-> [!IMPORTANT]
-> Esta es **mi copia de portfolio**. La versión oficial, la que publica la web que usa el instituto, está en la organización del centro: **[IESLACIMURGA/inventario-gimnasio](https://github.com/IESLACIMURGA/inventario-gimnasio)**. Los cambios se hacen allí.
+> [!NOTE]
+> Este es el **repositorio oficial** del inventario: el que publica la web que usa el centro. Si encuentras un fallo o quieres proponer un cambio, hazlo aquí.
 
 # 🚀 Sobre el Proyecto
 
@@ -55,7 +54,7 @@ Los profesores mantienen el inventario en una **hoja de Google Sheets** que ya s
 
 Es un **proyecto real** para el departamento de Educación Física del **IES Lacimurga**, que necesitaba controlar el material del almacén del gimnasio. Las condiciones eran claras: **coste cero**, **seguro** y que **los datos de los alumnos no salieran del centro**.
 
-Diseñé primero los wireframes en **Figma** y, tras valorar una primera versión con servidor y sistema de préstamos, decidí simplificarla a una **web estática**. Sin préstamos ni cuentas no hace falta guardar ningún dato personal, y Google Sheets aporta gratis los permisos (solo editan los profesores) y el historial de cambios. Los motivos de cada decisión están en el [manual](MANUAL.md#11-decisiones-y-limitaciones).
+La desarrollé de forma desinteresada como antigua alumna del centro. Diseñé primero los wireframes en **Figma** y, tras valorar una primera versión con servidor y sistema de préstamos, decidí simplificarla a una **web estática**. Sin préstamos ni cuentas no hace falta guardar ningún dato personal, y Google Sheets aporta gratis los permisos (solo editan los profesores) y el historial de cambios. Los motivos de cada decisión están en el [manual](MANUAL.md#11-decisiones-y-limitaciones).
 
 ```
  Profesores ──editan──▶ Hoja de Google Sheets (5 pestañas)
@@ -96,7 +95,7 @@ Diseñé primero los wireframes en **Figma** y, tras valorar una primera versió
 # 📂 Estructura del Proyecto
 
 ```bash
-inventario-gimnasio-estatico/
+inventario-gimnasio/
 ├── index.html               # Página única de la web
 ├── css/estilos.css          # Escritorio, tablet, móvil e impresión
 ├── js/
@@ -120,7 +119,7 @@ inventario-gimnasio-estatico/
 
 ### 1. Verla online
 
-**[ieslacimurga.github.io/inventario-gimnasio](https://ieslacimurga.github.io/inventario-gimnasio/)** (versión oficial del centro)
+**[ieslacimurga.github.io/inventario-gimnasio](https://ieslacimurga.github.io/inventario-gimnasio/)**
 
 ### 2. Ponerla en marcha para otro centro
 
@@ -158,6 +157,7 @@ node --test tests/*.test.mjs
   <a href="https://www.linkedin.com/in/eva-gallardo-romero-830362349/" target="_blank">
     <img src="https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn">
   </a>
+  <p><sub>Para el departamento de Educación Física del <a href="https://github.com/IESLACIMURGA">IES Lacimurga</a></sub></p>
 </div>
 
 <div align="center">
